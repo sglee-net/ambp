@@ -37,9 +37,10 @@ class BPSet extends Component {
     }
 
     render() {
+        const dateFormat = 'YYYY/MM/DD';
         return (
             <React.Fragment>
-                <DatePicker defaultValue={moment('2015/01/01', dateFormat)} format={dateFormat} />
+                <DatePicker defaultValue={moment(moment(), dateFormat)} format={dateFormat} />
                 <Input placeholder="high pressure" onChange={this.updateHighPressure} value={this.state.highPressure}/>
                 <Input placeholder="low pressure" onChange={this.updateLowPressure} value={this.state.lowPressure}/>
                 <Button type="primary" onClick={this.setPressure}>Set</Button>
