@@ -131,7 +131,7 @@ class BPTable extends Component {
 
         return (
             <React.Fragment>
-                <RangePicker defaultValue={moment(moment)} format={dateFormat} onChange={this.changeDateRange} />
+                <RangePicker defaultValue={moment(moment(),dateFormat)} onChange={this.changeDateRange} />
                 {/* defaultValue={moment('2010/01/01', dateFormat)}  */}
                 <Button type="primary" onClick={this.getPressure}>Get</Button>
                 <Table rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.dataSource}/>
