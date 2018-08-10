@@ -47,8 +47,10 @@ class BPTable extends Component {
     postPressure = async() => {
         console.log('getPressure');
         var ret = await Promise.all([
-        services.getExample()
+            services.getExample()
         ]);
+
+        console.log(ret);
 
         for(let i=0; i<ret[0].data.length; i++) {
             ret[0].data[i].key = i+1;
