@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Table, Icon, Divider} from 'antd';
 // import GTable from '../atomics/GTable';
 import {Button} from 'antd';
+import moment from 'moment';
+import {DatePicker} from 'antd';
 import * as services from '../services/posts';
 import 'antd/dist/antd.css';
 
@@ -9,30 +11,33 @@ class BPTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-        columns: [{
-            title: 'userId',
-            dataIndex: 'userId',
-            key: 'userId',
-            render: text => {text}//<a href="javascript:;">{text}</a>,
-        }, {
-            title: 'id',
-            dataIndex: 'id',
-            key: 'id',
-        }, {
-            title: 'title',
-            dataIndex: 'title',
-            key: 'title',
-        }, {
-            title: 'body',
-            dataIndex: 'body',
-            key: 'body',
-        }], 
-        dataSource: [],
-        selectedRowKeys: [],
+            columns: [{
+                title: 'userId',
+                dataIndex: 'userId',
+                key: 'userId',
+                // render: text => {text}//<a href="javascript:;">{text}</a>,
+            }, {
+                title: 'id',
+                dataIndex: 'id',
+                key: 'id',
+            }, {
+                title: 'title',
+                dataIndex: 'title',
+                key: 'title',
+            }, {
+                title: 'body',
+                dataIndex: 'body',
+                key: 'body',
+            }], 
+            dataSource: [],
+            selectedRowKeys: [],
+            dateFrom: moment(moment()),
+            dateTo: moment(moment()),
         }
 
         this.getPressure = this.getPressure.bind(this);
         this.onSelectChange = this.onSelectChange.bind(this);
+        this.changeDateRange = this.changeDateRange.bind(this);
     }
 
     getPressure() {
@@ -55,6 +60,16 @@ class BPTable extends Component {
     onSelectChange = (selectedRowKeys) => {
         console.log('selectedRowKeys changed: ', selectedRowKeys);
         this.setState({ selectedRowKeys });
+    }
+
+    changeDateRange(_date, _dateString) {
+        this.setState({dateFrom: _date[0].startOf('day')});
+        this.setState({dateTo: _date[1].endOf('day')});
+
+        console.log(_date[0].startOf('day'));
+        console.log(_date[1].endOf('day'));
+        // console.log(this.state.dateFrom);
+        // console.log(this.state.dateTo);
     }
 
     render() {
@@ -101,6 +116,9 @@ class BPTable extends Component {
         // onSelection: this.onSelection,
         // };
 
+        const dateFormat = 'YYYY/MM/DD';
+        const {RangePicker} = DatePicker;
+
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
               console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -113,6 +131,8 @@ class BPTable extends Component {
 
         return (
             <React.Fragment>
+                <RangePicker defaultValue={moment(moment)} format={dateFormat} onChange={this.changeDateRange} />
+                {/* defaultValue={moment('2010/01/01', dateFormat)}  */}
                 <Button type="primary" onClick={this.getPressure}>Get</Button>
                 <Table rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.dataSource}/>
             </React.Fragment>
