@@ -10,5 +10,20 @@ export function getExample() {
 
     console.log(ret);
     return ret;
-//?tableName=bp');
+// //?tableName=bp');
+    // axios.get('http://localhost:8080', {
+    //     // params: {
+    //     //     tableName: 'bp'
+    //     // }
+    // })
+    // .then(
+    //     res => {
+    //         console.log(res);
+    //     }
+    // )
+    // .catch(
+    //     res => {
+    //         console.log(res);
+    //     }
+    // )
 }

@@ -11,24 +11,47 @@ class BPTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns: [{
-                title: 'userId',
-                dataIndex: 'userId',
-                key: 'userId',
-                // render: text => {text}//<a href="javascript:;">{text}</a>,
-            }, {
-                title: 'id',
-                dataIndex: 'id',
-                key: 'id',
-            }, {
-                title: 'title',
-                dataIndex: 'title',
-                key: 'title',
-            }, {
-                title: 'body',
-                dataIndex: 'body',
-                key: 'body',
-            }], 
+            // columns: [{
+            //     title: 'userId',
+            //     dataIndex: 'userId',
+            //     key: 'userId',
+            //     // render: text => {text}//<a href="javascript:;">{text}</a>,
+            // }, {
+            //     title: 'id',
+            //     dataIndex: 'id',
+            //     key: 'id',
+            // }, {
+            //     title: 'title',
+            //     dataIndex: 'title',
+            //     key: 'title',
+            // }, {
+            //     title: 'body',
+            //     dataIndex: 'body',
+            //     key: 'body',
+            // }], 
+            // columns: [],
+            columns: [
+                {
+                    title: 'hbp',
+                    dataIndex: 'hbp',
+                    key: 'hbp'
+                }, 
+                {
+                    title: 'time',
+                    dataIndex: 'time',
+                    key: 'time'
+                },
+                {
+                    title: 'lbp',
+                    dataIndex: 'lbp',
+                    key: 'lbp'
+                },
+                {
+                    title: 'userId',
+                    dataIndex: 'userId',
+                    key: 'userId'
+                },
+            ],
             dataSource: [],
             selectedRowKeys: [],
             dateFrom: moment(moment()),
@@ -50,13 +73,12 @@ class BPTable extends Component {
             services.getExample()
         ]);
 
-        console.log(ret);
-
-        for(let i=0; i<ret[0].data.length; i++) {
-            ret[0].data[i].key = i+1;
-        // console.log(ret[0].data[i]);
-        }
+        console.log(ret[0].data);
+        // for(let i=0; i<ret[0].data.length; i++) {
+        //     ret[0].data[i].key = i+1;
+        // }
         this.setState( {dataSource: ret[0].data} );
+        this.setState( {columns: ret[0].columns} );
     }
 
     onSelectChange = (selectedRowKeys) => {
