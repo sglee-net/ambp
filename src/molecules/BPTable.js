@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
-import {Table, Icon, Divider} from 'antd';
-// import GTable from '../atomics/GTable';
+import {Table} from 'antd';
 import {Button} from 'antd';
 import moment from 'moment';
 import {DatePicker} from 'antd';
-import * as services from '../services/posts';
+import * as GetServices from '../services/get';
 import 'antd/dist/antd.css';
 
 class BPTable extends Component {
@@ -32,24 +31,24 @@ class BPTable extends Component {
             // columns: [],
             columns: [
                 {
-                    title: 'hbp',
-                    dataIndex: 'hbp',
-                    key: 'hbp'
-                }, 
-                {
                     title: 'time',
                     dataIndex: 'time',
                     key: 'time'
                 },
                 {
-                    title: 'lbp',
-                    dataIndex: 'lbp',
-                    key: 'lbp'
-                },
-                {
                     title: 'userId',
                     dataIndex: 'userId',
                     key: 'userId'
+                },
+                {
+                    title: 'hbp',
+                    dataIndex: 'hbp',
+                    key: 'hbp'
+                }, 
+                {
+                    title: 'lbp',
+                    dataIndex: 'lbp',
+                    key: 'lbp'
                 },
             ],
             dataSource: [],
@@ -70,15 +69,21 @@ class BPTable extends Component {
     postPressure = async() => {
         console.log('getPressure');
         var ret = await Promise.all([
-            services.getExample()
+            GetServices.getBpAll()
         ]);
 
-        console.log(ret[0].data);
-        // for(let i=0; i<ret[0].data.length; i++) {
-        //     ret[0].data[i].key = i+1;
-        // }
-        this.setState( {dataSource: ret[0].data} );
-        this.setState( {columns: ret[0].columns} );
+        // console.log(ret[0].data);
+        // const d = (ret[0].data.dataSource);
+        // console.log(d);
+        // console.log(ret[0].data);
+        for(let i=0; i<ret[0].data.dataSource.length; i++) {
+            ret[0].data.dataSource[i].key = i+1;
+        }
+        console.log(ret[0].data.dataSource);
+
+        this.setState( {dataSource: ret[0].data.dataSource} );
+        // this.setState( {columns: ret[0].data.columns} );
+        // this.setState( {columns : this.state.columns});
     }
 
     onSelectChange = (selectedRowKeys) => {
@@ -155,7 +160,7 @@ class BPTable extends Component {
 
         return (
             <React.Fragment>
-                <RangePicker defaultValue={moment(moment(),dateFormat)} onChange={this.changeDateRange} />
+                <RangePicker defaultValue={[moment(moment(),dateFormat),moment(moment(),dateFormat)]} onChange={this.changeDateRange} />
                 {/* defaultValue={moment('2010/01/01', dateFormat)}  */}
                 <Button type="primary" onClick={this.getPressure}>Get</Button>
                 <Table rowSelection={rowSelection} columns={this.state.columns} dataSource={this.state.dataSource}/>

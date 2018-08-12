@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import {Route} from 'react-router-dom';
+import {Switch} from 'react-router-dom';
+import BPMenu from './pages/BPMenu';
+import BPHome from './pages/BPHome';
+import BPInput from './pages/BPInput';
+import BPHistory from './pages/BPHistory';
+import BPStatistics from './pages/BPStatistics';
 import './App.css';
-import BPSet from './molecules/BPSet';
-import BPTable from './molecules/BPTable';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header> */}
-        {/* <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p> */}
-        <BPSet/>
-        <BPTable/>
-
+      <BPMenu/>
+      <Switch>
+        <Route exact path='/' component={BPHome}/>
+        <Route path='/bpinput' component={BPInput}/>
+        <Route path='/bphistory' component={BPHistory}/>
+        <Route path='/bpstatistics' component={BPStatistics}/>
+      </Switch>
       </div>
     );
   }

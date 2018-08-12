@@ -4,10 +4,11 @@ import {Button} from 'antd';
 import {DatePicker} from 'antd';
 import {TimePicker} from 'antd';
 import moment from 'moment';
+import * as PostServices from '../services/post';
 import 'antd/dist/antd.css';
 
 class BPSet extends Component {
-    dateFormat = 'YYYY/MM/DD';
+    dateFormat = 'YYYY-MM-DD';
     timeFormat = 'HH:mm:ss';
 
     constructor(props) {
@@ -18,7 +19,15 @@ class BPSet extends Component {
             highPressure: 120,
             date: moment(moment()),
             time: moment(moment()),
-            selectedMoment: moment(moment())
+            selectedMoment: moment(moment()),
+            insertionDataSetFormat: { 
+                "tableName" : "bp",
+                "colNames" : [
+                    "time", "userid", "hbp", "lbp"
+                ],
+                "colValues" : [
+                ]
+            },
         }
 
         this.updateLowPressure = this.updateLowPressure.bind(this);
@@ -37,17 +46,43 @@ class BPSet extends Component {
     }
 
     setPressure = async(event) => {
-        console.log(this.state.highPressure);
-        console.log(this.state.lowPressure);
-        console.log(this.state.selectedMoment);
-        console.log(this.state.selectedMoment.format('x'));
+        // console.log(this.state.highPressure);
+        // console.log(this.state.lowPressure);
+        // console.log(this.state.selectedMoment);
+        // console.log(this.state.selectedMoment.format('x'));
 
+        let dummyDataSet = this.state.insertionDataSetFormat;
+        // { 
+        //     "tableName" : "bp",
+        //     "colNames" : [
+        //         "time", "name", "highest pressure", "lowest pressure"
+        //     ],
+        //     "colValues" : [
+        //     ]
+        // };
+        console.log(this.state.selectedMoment);
+        let arr = [];
+        arr.push(this.state.selectedMoment.format("YYYY-MM-DD HH:mm:ss"));
+        arr.push(1);
+        arr.push(Number(this.state.highPressure));
+        arr.push(Number(this.state.lowPressure));
+        dummyDataSet.colValues = arr;
+
+        console.log(dummyDataSet);
         // console.log(this.state.date);
         // console.log(this.state.time);
         // const promiseAll = await Promise.all([
         //     PostPressure()
         // ]);
+        this.insertPressure(dummyDataSet);
+    }
 
+    insertPressure = async(payload) => {
+        var ret = await Promise.all([
+            PostServices.insertRecord(payload)
+        ]);
+
+        console.log(ret[0]);
     }
 
     setDate(_date, _dateString) {
