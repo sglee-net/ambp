@@ -20,10 +20,10 @@ class BPSet extends Component {
             date: moment(moment()),
             time: moment(moment()),
             selectedMoment: moment(moment()),
-            insertionDataSetFormat: { 
+            dataFormat: { 
                 "tableName" : "bp",
                 "colNames" : [
-                    "time", "userid", "hbp", "lbp"
+                    "userno", "time", "hbp", "lbp"
                 ],
                 "colValues" : [
                 ]
@@ -51,7 +51,7 @@ class BPSet extends Component {
         // console.log(this.state.selectedMoment);
         // console.log(this.state.selectedMoment.format('x'));
 
-        let dummyDataSet = this.state.insertionDataSetFormat;
+        let dummyDataSet = this.state.dataFormat;
         // { 
         //     "tableName" : "bp",
         //     "colNames" : [
@@ -62,8 +62,8 @@ class BPSet extends Component {
         // };
         console.log(this.state.selectedMoment);
         let arr = [];
-        arr.push(this.state.selectedMoment.format("YYYY-MM-DD HH:mm:ss"));
         arr.push(1);
+        arr.push(this.state.selectedMoment.format("YYYY-MM-DD HH:mm:ss"));
         arr.push(Number(this.state.highPressure));
         arr.push(Number(this.state.lowPressure));
         dummyDataSet.colValues = arr;
@@ -74,15 +74,23 @@ class BPSet extends Component {
         // const promiseAll = await Promise.all([
         //     PostPressure()
         // ]);
-        this.insertPressure(dummyDataSet);
+        this.insertPressure(dummyDataSet)
+        .then(function(values) {
+            console.log("success")
+            window.alert("insertion succeeded")
+        },function(error) {
+        })
+        .catch(function() {
+            window.alert("error occurred");
+        });
     }
 
     insertPressure = async(payload) => {
-        var ret = await Promise.all([
-            PostServices.insertRecord(payload)
-        ]);
-
-        console.log(ret[0]);
+        // var ret = await Promise.all([
+        //     PostServices.insertRecord(payload)
+        // ])
+        // console.log(ret[0]);
+        return PostServices.insertRecord(payload);
     }
 
     setDate(_date, _dateString) {

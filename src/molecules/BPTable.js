@@ -4,6 +4,7 @@ import {Button} from 'antd';
 import moment from 'moment';
 import {DatePicker} from 'antd';
 import * as GetServices from '../services/get';
+import * as PostServices from '../services/post';
 import 'antd/dist/antd.css';
 
 class BPTable extends Component {
@@ -29,24 +30,31 @@ class BPTable extends Component {
             //     key: 'body',
             // }], 
             // columns: [],
+            dataSetFormat: { 
+                "tableName" : "bp",
+                "colNames" : [
+                    "userno", "time", "hbp", "lbp"
+                ],
+                "whereClause" : "userno=1"
+            },
             columns: [
+                {
+                    title: 'userno',
+                    dataIndex: 'userno',
+                    key: 'userno'
+                },
                 {
                     title: 'time',
                     dataIndex: 'time',
                     key: 'time'
                 },
                 {
-                    title: 'userId',
-                    dataIndex: 'userId',
-                    key: 'userId'
-                },
-                {
-                    title: 'hbp',
+                    title: 'hbp', //this.state.dataSetFormat.colNames[2], //'hbp',
                     dataIndex: 'hbp',
                     key: 'hbp'
                 }, 
                 {
-                    title: 'lbp',
+                    title: 'lbp', //this.state.dataSetFormat.colNames[3], //'lbp',
                     dataIndex: 'lbp',
                     key: 'lbp'
                 },
@@ -63,15 +71,36 @@ class BPTable extends Component {
     }
 
     getPressure() {
-        this.postPressure();
+        let dummyDataSet = this.state.dataSetFormat;
+        // console.log(dummyDataSet)
+
+        this.postPressure(dummyDataSet)
+        // this.postPressure(dummyDataSet)
+        // .then(function(value) {
+        //     // console.log(value)
+        //     // console.log("postPressure")
+        //     // console.log(value.data.dataSource);
+        //     for(let i=0; i<value.data.dataSource.length; i++) {
+        //         value.data.dataSource[i].key = i+1;
+        //     }
+        //     console.log(value.data);
+        //     console.log("getPressure succeeded") 
+        //     this.setState( {dataSource: value.data.dataSource} );
+        //     this.setState( {columns : this.state.columns});
+        // },
+        // function(error) {
+        //     console.log("error in getPressure")
+        // })
+        // .catch(function(error) {
+        //     window.alert("error occurred");
+        // });
     }
 
-    postPressure = async() => {
+    postPressure = async(payload) => {
         console.log('getPressure');
         var ret = await Promise.all([
             GetServices.getBpAll()
         ]);
-
         // console.log(ret[0].data);
         // const d = (ret[0].data.dataSource);
         // console.log(d);
@@ -84,6 +113,10 @@ class BPTable extends Component {
         this.setState( {dataSource: ret[0].data.dataSource} );
         // this.setState( {columns: ret[0].data.columns} );
         // this.setState( {columns : this.state.columns});
+
+        // return GetServices.getBpAll();
+//        return PostServices.getBps(payload);
+
     }
 
     onSelectChange = (selectedRowKeys) => {

@@ -9,8 +9,14 @@ let axiosConfig = {
 };
 
 export function insertRecord(payload) {
-    // return axios.get('https://jsonplaceholder.typicode.com/posts/');
     return axios.post('http://localhost:8080/record', 
+        JSON.stringify(payload),
+        axiosConfig
+    );
+}
+
+export function getBps(payload) {
+    return axios.post('http://localhost:8080/select', 
         JSON.stringify(payload),
         axiosConfig
     );

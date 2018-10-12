@@ -10,7 +10,7 @@ let axiosConfig = {
 export function getBpAll() {
     return axios.get('http://localhost:8080/selectAll', { 
         params: {
-            tableName: 'bp'
+            tableName: 'bp',
         },
         axiosConfig
     });
