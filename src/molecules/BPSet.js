@@ -15,18 +15,17 @@ class BPSet extends Component {
         super(props);
 
         this.state = {
+            userId: 'sglee',
             lowPressure: 80,
             highPressure: 120,
             date: moment(moment()),
             time: moment(moment()),
             selectedMoment: moment(moment()),
             dataFormat: { 
-                "tableName" : "bp",
-                "colNames" : [
-                    "userno", "time", "hbp", "lbp"
-                ],
-                "colValues" : [
-                ]
+                userId: "",
+                time: "",
+                hbp: 120,
+                lbp: 80,
             },
         }
 
@@ -46,51 +45,23 @@ class BPSet extends Component {
     }
 
     setPressure = async(event) => {
-        // console.log(this.state.highPressure);
-        // console.log(this.state.lowPressure);
-        // console.log(this.state.selectedMoment);
-        // console.log(this.state.selectedMoment.format('x'));
+        let payload = this.state.dataFormat;
+        payload.userId = this.state.userId;
+        payload.time = this.state.selectedMoment.format("YYYY-MM-DD HH:mm:ss")
+        payload.hbp = Number(this.state.highPressure)
+        payload.lbp = Number(this.state.lowPressure)
 
-        let dummyDataSet = this.state.dataFormat;
-        // { 
-        //     "tableName" : "bp",
-        //     "colNames" : [
-        //         "time", "name", "highest pressure", "lowest pressure"
-        //     ],
-        //     "colValues" : [
-        //     ]
-        // };
-        console.log(this.state.selectedMoment);
-        let arr = [];
-        arr.push(1);
-        arr.push(this.state.selectedMoment.format("YYYY-MM-DD HH:mm:ss"));
-        arr.push(Number(this.state.highPressure));
-        arr.push(Number(this.state.lowPressure));
-        dummyDataSet.colValues = arr;
-
-        console.log(dummyDataSet);
-        // console.log(this.state.date);
-        // console.log(this.state.time);
-        // const promiseAll = await Promise.all([
-        //     PostPressure()
-        // ]);
-        this.insertPressure(dummyDataSet)
-        .then(function(values) {
-            console.log("success")
+        PostServices.insertCustom(payload)
+        .then(response => {
+            console.log("insertion succeeded")
             window.alert("insertion succeeded")
-        },function(error) {
+        },
+        function(error) {
+            console.log("error in getPressure")
         })
-        .catch(function() {
+        .catch(function(error) {
             window.alert("error occurred");
         });
-    }
-
-    insertPressure = async(payload) => {
-        // var ret = await Promise.all([
-        //     PostServices.insertRecord(payload)
-        // ])
-        // console.log(ret[0]);
-        return PostServices.insertRecord(payload);
     }
 
     setDate(_date, _dateString) {

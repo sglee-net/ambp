@@ -15,9 +15,10 @@ export function insertRecord(payload) {
     );
 }
 
-export function getBps(payload) {
-    return axios.post('http://localhost:8080/select', 
+export function insertCustom(payload) {
+    console.log("insertCustom {}",payload)
+    return axios.post('http://localhost:8080/insertCustom', 
         JSON.stringify(payload),
         axiosConfig
-    );
+    ); 
 }

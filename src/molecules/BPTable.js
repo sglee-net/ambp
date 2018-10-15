@@ -39,9 +39,9 @@ class BPTable extends Component {
             },
             columns: [
                 {
-                    title: 'userno',
-                    dataIndex: 'userno',
-                    key: 'userno'
+                    title: 'id',
+                    dataIndex: 'id',
+                    key: 'id'
                 },
                 {
                     title: 'time',
@@ -71,52 +71,28 @@ class BPTable extends Component {
     }
 
     getPressure() {
-        let dummyDataSet = this.state.dataSetFormat;
-        // console.log(dummyDataSet)
-
-        this.postPressure(dummyDataSet)
-        // this.postPressure(dummyDataSet)
-        // .then(function(value) {
-        //     // console.log(value)
-        //     // console.log("postPressure")
-        //     // console.log(value.data.dataSource);
-        //     for(let i=0; i<value.data.dataSource.length; i++) {
-        //         value.data.dataSource[i].key = i+1;
-        //     }
-        //     console.log(value.data);
-        //     console.log("getPressure succeeded") 
-        //     this.setState( {dataSource: value.data.dataSource} );
-        //     this.setState( {columns : this.state.columns});
-        // },
-        // function(error) {
-        //     console.log("error in getPressure")
-        // })
-        // .catch(function(error) {
-        //     window.alert("error occurred");
-        // });
-    }
-
-    postPressure = async(payload) => {
-        console.log('getPressure');
-        var ret = await Promise.all([
-            GetServices.getBpAll()
-        ]);
-        // console.log(ret[0].data);
-        // const d = (ret[0].data.dataSource);
-        // console.log(d);
-        // console.log(ret[0].data);
-        for(let i=0; i<ret[0].data.dataSource.length; i++) {
-            ret[0].data.dataSource[i].key = i+1;
-        }
-        console.log(ret[0].data.dataSource);
-
-        this.setState( {dataSource: ret[0].data.dataSource} );
-        // this.setState( {columns: ret[0].data.columns} );
-        // this.setState( {columns : this.state.columns});
-
-        // return GetServices.getBpAll();
-//        return PostServices.getBps(payload);
-
+        // let payload = this.state.dataSetFormat;
+        // PostServices
+        // .getBps(payload)
+        GetServices
+        .getSelectCustom('sglee', this.state.dateFrom.format("YYYY-MM-DD HH:mm:ss"), this.state.dateTo.format("YYYY-MM-DD HH:mm:ss"))
+        .then(response => {
+            console.log(response)
+            console.log(response.data.dataSource)
+            for(let i=0; i<response.data.dataSource.length; i++) {
+                response.data.dataSource[i].key = i+1;
+            }
+            return response.data.dataSource
+        },
+        function(error) {
+            console.log("error in getPressure")
+        })
+        .then(dataSource => {
+            this.setState( {dataSource: dataSource})
+        })
+        .catch(function(error) {
+            window.alert("error occurred");
+        });
     }
 
     onSelectChange = (selectedRowKeys) => {
